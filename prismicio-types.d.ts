@@ -69,7 +69,7 @@ export type HomePageDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice = BiographySlice;
+type PageDocumentDataSlicesSlice = TecklistSlice | BiographySlice;
 
 /**
  * Content for page documents
@@ -436,6 +436,88 @@ type HeroSliceVariation = HeroSliceDefault;
  */
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
+/**
+ * Item in *Tecklist → Default → Primary → teck stack*
+ */
+export interface TecklistSliceDefaultPrimaryTeckStackItem {
+  /**
+   * teck name field in *Tecklist → Default → Primary → teck stack*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: tecklist.default.primary.teck_stack[].teck_name
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  teck_name: prismic.KeyTextField;
+
+  /**
+   * teck color field in *Tecklist → Default → Primary → teck stack*
+   *
+   * - **Field Type**: Color
+   * - **Placeholder**: *None*
+   * - **API ID Path**: tecklist.default.primary.teck_stack[].teck_color
+   * - **Documentation**: https://prismic.io/docs/field#color
+   */
+  teck_color: prismic.ColorField;
+}
+
+/**
+ * Primary content in *Tecklist → Default → Primary*
+ */
+export interface TecklistSliceDefaultPrimary {
+  /**
+   * Heading field in *Tecklist → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: tecklist.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  heading: prismic.KeyTextField;
+
+  /**
+   * teck stack field in *Tecklist → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: tecklist.default.primary.teck_stack[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  teck_stack: prismic.GroupField<
+    Simplify<TecklistSliceDefaultPrimaryTeckStackItem>
+  >;
+}
+
+/**
+ * Default variation for Tecklist Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TecklistSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TecklistSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Tecklist*
+ */
+type TecklistSliceVariation = TecklistSliceDefault;
+
+/**
+ * Tecklist Shared Slice
+ *
+ * - **API ID**: `tecklist`
+ * - **Description**: Tecklist
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TecklistSlice = prismic.SharedSlice<
+  "tecklist",
+  TecklistSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -464,6 +546,11 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      TecklistSlice,
+      TecklistSliceDefaultPrimaryTeckStackItem,
+      TecklistSliceDefaultPrimary,
+      TecklistSliceVariation,
+      TecklistSliceDefault,
     };
   }
 }
