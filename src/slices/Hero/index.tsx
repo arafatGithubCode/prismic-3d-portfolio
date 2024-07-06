@@ -2,7 +2,9 @@
 import { useEffect, useRef } from "react";
 import { Content, KeyTextField } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
-import gsap from "gsap";
+import { gsap } from "gsap";
+import Bounded from "@/components/Bounded";
+import { Shapes } from "@/slices/Hero/Shapes";
 
 export type HeroProps = SliceComponentProps<Content.HeroSlice>;
 
@@ -40,7 +42,7 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
     return name.split("").map((letter, index) => (
       <span
         key={index}
-        className={`name-animation name-animation-${key}-index inline-block opacity-0 `}
+        className={`name-animation name-animation-${key}-${index} inline-block opacity-0 `}
       >
         {letter}
       </span>
@@ -48,12 +50,13 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
   };
 
   return (
-    <section
+    <Bounded
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
       ref={component}
     >
       <div className="grid min-h-[70vh] grid-cols-1 items-center md:grid-cols-2">
+        <Shapes />
         <div className="col-start-1 md:row-start-1">
           <h1
             className="mb-8 text-[clamp(3rem,20vmin,20rem)] font-extrabold leading-none tracking-tighter"
@@ -73,7 +76,7 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
           </span>
         </div>
       </div>
-    </section>
+    </Bounded>
   );
 };
 
