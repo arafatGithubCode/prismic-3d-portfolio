@@ -1,5 +1,5 @@
 import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
+import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 
 /**
  * Props for `TextBlog`.
@@ -15,7 +15,9 @@ const TextBlog = ({ slice }: TextBlogProps): JSX.Element => {
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
-      Placeholder component for text_blog (variation: {slice.variation}) Slices
+      <div className="prose prose-invert">
+        <PrismicRichText field={slice.primary.text} />
+      </div>
     </section>
   );
 };

@@ -4,7 +4,7 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
-type BlogPostDocumentDataSlicesSlice = TextBlogSlice;
+type BlogPostDocumentDataSlicesSlice = ImageBlockSlice | TextBlogSlice;
 
 /**
  * Content for blog post documents
@@ -231,7 +231,7 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-type ProjectDocumentDataSlicesSlice = TextBlogSlice;
+type ProjectDocumentDataSlicesSlice = ImageBlockSlice | TextBlogSlice;
 
 /**
  * Content for project documents
@@ -723,6 +723,51 @@ type HeroSliceVariation = HeroSliceDefault;
 export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
 
 /**
+ * Primary content in *ImageBlock → Default → Primary*
+ */
+export interface ImageBlockSliceDefaultPrimary {
+  /**
+   * Article Image field in *ImageBlock → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: image_block.default.primary.article_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  article_image: prismic.ImageField<never>;
+}
+
+/**
+ * Default variation for ImageBlock Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ImageBlockSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ImageBlockSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *ImageBlock*
+ */
+type ImageBlockSliceVariation = ImageBlockSliceDefault;
+
+/**
+ * ImageBlock Shared Slice
+ *
+ * - **API ID**: `image_block`
+ * - **Description**: ImageBlock
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ImageBlockSlice = prismic.SharedSlice<
+  "image_block",
+  ImageBlockSliceVariation
+>;
+
+/**
  * Item in *Tecklist → Default → Primary → teck stack*
  */
 export interface TecklistSliceDefaultPrimaryTeckStackItem {
@@ -805,6 +850,21 @@ export type TecklistSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *TextBlog → Default → Primary*
+ */
+export interface TextBlogSliceDefaultPrimary {
+  /**
+   * text field in *TextBlog → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_blog.default.primary.text
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  text: prismic.RichTextField;
+}
+
+/**
  * Default variation for TextBlog Slice
  *
  * - **API ID**: `default`
@@ -813,7 +873,7 @@ export type TecklistSlice = prismic.SharedSlice<
  */
 export type TextBlogSliceDefault = prismic.SharedSliceVariation<
   "default",
-  Record<string, never>,
+  Simplify<TextBlogSliceDefaultPrimary>,
   never
 >;
 
@@ -872,12 +932,17 @@ declare module "@prismicio/client" {
       HeroSliceDefaultPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
+      ImageBlockSlice,
+      ImageBlockSliceDefaultPrimary,
+      ImageBlockSliceVariation,
+      ImageBlockSliceDefault,
       TecklistSlice,
       TecklistSliceDefaultPrimaryTeckStackItem,
       TecklistSliceDefaultPrimary,
       TecklistSliceVariation,
       TecklistSliceDefault,
       TextBlogSlice,
+      TextBlogSliceDefaultPrimary,
       TextBlogSliceVariation,
       TextBlogSliceDefault,
     };
